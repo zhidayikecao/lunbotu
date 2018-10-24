@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>京东轮播效果</title>
+<style>
+*{
+    margin: 0;
+    padding: 0;
+}
+ul{list-style: none;}
+.out{
+    width: 730px;height: 454px;
+    /* border: 5px solid black; */
+    margin: 50px auto;position: relative;
+}
+.out .img li{
+    position: absolute;top: 0;left: 0;display: none;
+}
+.out .num{ position: absolute;bottom:20px;left: 0; font-size: 0;width: 100%;text-align: center;}
+.out .num li{ width: 20px;height: 20px;text-align: center;color: #fff;
+            line-height: 20px;background: #666;border-radius: 50%; display: inline-block; margin-left: 5px; font-size: 16px;
+            cursor: pointer;
+            }
+.out .num li.active{
+    background: #a00;
+}
+.out .btn{position: absolute;top: 50%;background: rgb(0, 0,0,0.5);width: 30px;
+            height: 60px;color: #fff;text-align: center;line-height: 60px;font-size: 40px;
+            margin-top: -30px;display: none;cursor: pointer;}
+.out:hover .btn{display: block;}
+.out .left{left:0;} 
+.out .right{right:0;}
+</style>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script>
+    $(function(){
+        // 代码初始化
+        var size=$(".img li").size();
+        for(var i=1;i<=size;i++){
+            var li="<li>"+i+"</li>";
+            $(".num").append(li);
+        }
+        // 手动控制轮播
+        $(".img li:first").show();
+        $(".num>li").eq(0).addClass("active");
+        $(".num li").mouseenter(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            var index=$(this).index();
+            i=index;
+            $(".img li").eq(index).stop().fadeIn(300).siblings().stop().fadeOut(300);
+        })
+
+        // 定时器自动控制轮播
+        var i=0;
+        var timer=setInterval(move,1000);
+        // 轮播图定时器核心向右的函数
+        function move(){
+            i++;
+            if(i==size){
+                i=0;
+            }
+            $(".num li").eq(i).addClass("active").siblings().removeClass("active");
+            $(".img li").eq(i).fadeIn(300).siblings().fadeOut(300);
+        }
+        // 轮播图定时器核心向右的函数
+        function moveL(){
+            i--;
+            if(i==-1){
+                i=size-1;
+            }
+            $(".num li").eq(i).addClass("active").siblings().removeClass("active");
+            $(".img li").eq(i).fadeIn(300).siblings().fadeOut(300);
+        }
+        
+        $(".out").hover(function(){
+            clearInterval(timer);
+        },function(){
+            timer=setInterval(move,1000);
+        })
+
+        // 左边按钮的点击事件
+        $(".out>.left").click(function(){
+                moveL();
+        })
+        // 右边按钮的点击事件
+        $(".out>.right").click(function(){
+            move();
+        })
+    })
+</script>
+</head>
+
+<body>
+    <div class="out">
+        <ul class="img">
+            <li><a href="#"><img src="images/1.jpg"></a></li>
+            <li><a href="#"><img src="images/2.jpg"></a></li>
+            <li><a href="#"><img src="images/3.jpg"></a></li>
+            <li><a href="#"><img src="images/4.jpg"></a></li>
+            <li><a href="#"><img src="images/5.jpg"></a></li>
+        </ul>
+
+        <ul class="num">
+
+        </ul>
+        <div class="left btn"><</div>
+        <div class="right btn">></div>
+    </div>
+</body>
+</html>
